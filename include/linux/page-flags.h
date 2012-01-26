@@ -51,6 +51,9 @@
  * PG_hwpoison indicates that a page got corrupted in hardware and contains
  * data with incorrect ECC bits that triggered a machine check. Accessing is
  * not safe since it may cause another machine check. Don't touch!
+ *
+ * PG_wasactive reflects that a page previously was promoted to active status.
+ * Such pages should be considered higher priority for cleancache backends.
  */
 
 /*
@@ -111,6 +114,9 @@ enum pageflags {
 	PG_cma,			/* Sticky flag to track CMA pages */
 #endif
 	PG_readahead,		/* page in a readahead window */
+#ifdef CONFIG_CLEANCACHE
+	PG_was_active,
+#endif
 	__NR_PAGEFLAGS,
 
 	/* Filesystems */
@@ -217,6 +223,10 @@ PAGEFLAG(SwapBacked, swapbacked) __CLEARPAGEFLAG(SwapBacked, swapbacked)
 __PAGEFLAG(SlobFree, slob_free)
 
 __PAGEFLAG(SlubFrozen, slub_frozen)
+
+#ifdef CONFIG_CLEANCACHE
+PAGEFLAG(WasActive, was_active)
+#endif
 
 /*
  * Private page markings that may be used by the filesystem that owns the page

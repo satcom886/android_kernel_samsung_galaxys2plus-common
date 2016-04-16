@@ -1442,11 +1442,6 @@ struct super_block {
 	 * Saved pool identifier for cleancache (-1 means none)
 	 */
 	int cleancache_poolid;
-
-#ifdef CONFIG_ASYNC_FSYNC
-#define FLAG_ASYNC_FSYNC        0x1
-  	unsigned int fsync_flags;
-#endif
 };
 
 extern struct timespec current_fs_time(struct super_block *sb);
@@ -2078,7 +2073,6 @@ static inline int thaw_bdev(struct block_device *bdev, struct super_block *sb)
 }
 #endif
 extern int sync_filesystem(struct super_block *);
-extern void sync_filesystems(int wait);
 extern const struct file_operations def_blk_fops;
 extern const struct file_operations def_chr_fops;
 extern const struct file_operations bad_sock_fops;

@@ -65,8 +65,8 @@ struct vc_pmu_req_state {
 };
 
 static struct vc_pmu_req_state *vc_pmu_req_stt;
-
 static unsigned int vir_addr;
+
 
 /*============================================================================*/
 static int vc_pmu_req_parse(struct vc_pmu_req_state *s)

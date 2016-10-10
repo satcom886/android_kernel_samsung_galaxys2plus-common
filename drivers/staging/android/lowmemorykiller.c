@@ -165,14 +165,10 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 #if defined(CONFIG_MACH_CAPRI_SS_BAFFIN)
 	if(cma_free > CMA_ALLOC_MAX_PAGE)
 		cma_max_free = CMA_ALLOC_MAX_PAGE;
-	else if(CMA_ALLOC_MIN_PAGE < cma_free)
-		cma_max_free = CMA_ALLOC_MIN_PAGE;
 	else
 #endif
 		cma_max_free = cma_free;
 	
-	lowmem_print(1, "cma_max_free = %d", cma_max_free);
-
 	other_free -= cma_max_free;
 	other_file -= cma_file;
 #endif

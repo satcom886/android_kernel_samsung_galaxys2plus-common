@@ -1676,6 +1676,42 @@ vchiq_arm_init_state(VCHIQ_STATE_T *state, VCHIQ_ARM_STATE_T *arm_state)
 */
 
 inline void
+set_suspend_state(VCHIQ_ARM_STATE_T *arm_state,
+	enum vc_suspend_status new_state)
+{
+	/* set the state in all cases */
+	arm_state->vc_suspend_state = new_state;
+	/* state specific additional actions */
+	switch (new_state) {
+	case VC_SUSPEND_FORCE_CANCELED:
+		complete_all(&arm_state->vc_suspend_complete);
+		break;
+	case VC_SUSPEND_REJECTED:
+		complete_all(&arm_state->vc_suspend_complete);
+		break;
+	case VC_SUSPEND_FAILED:
+		complete_all(&arm_state->vc_suspend_complete);
+		arm_state->vc_resume_state = VC_RESUME_RESUMED;
+		complete_all(&arm_state->vc_resume_complete);
+		break;
+	case VC_SUSPEND_IDLE:
+		INIT_COMPLETION(arm_state->vc_suspend_complete);
+		break;
+	case VC_SUSPEND_REQUESTED:
+		break;
+	case VC_SUSPEND_IN_PROGRESS:
+		set_resume_state(arm_state, VC_RESUME_IDLE);
+		break;
+	case VC_SUSPEND_SUSPENDED:
+		complete_all(&arm_state->vc_suspend_complete);
+		break;
+	default:
+		BUG();
+		break;
+	}
+}
+
+inline void
 set_resume_state(VCHIQ_ARM_STATE_T *arm_state,
 	enum vc_resume_status new_state)
 {

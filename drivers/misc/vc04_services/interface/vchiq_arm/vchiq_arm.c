@@ -1675,7 +1675,6 @@ vchiq_arm_init_state(VCHIQ_STATE_T *state, VCHIQ_ARM_STATE_T *arm_state)
 ** VC_RESUME_FAILED - Currently unused - no mechanism to fail resume exists.
 */
 
-inline void
 set_suspend_state(VCHIQ_ARM_STATE_T *arm_state,
 	enum vc_suspend_status new_state)
 {
